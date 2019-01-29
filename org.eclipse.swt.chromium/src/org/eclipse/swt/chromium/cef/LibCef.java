@@ -40,6 +40,23 @@ public interface LibCef extends Library {
 			Pointer windows_sandbox_info);
 
 	///
+	// Perform a single iteration of CEF message loop processing. This function is
+	// provided for cases where the CEF message loop must be integrated into an
+	// existing application message loop. Use of this function is not recommended
+	// for most users; use either the cef_run_message_loop() function or
+	// CefSettings.multi_threaded_message_loop if possible. When using this function
+	// care must be taken to balance performance against excessive CPU usage. It is
+	// recommended to enable the CefSettings.external_message_pump option when using
+	// this function so that
+	// cef_browser_process_handler_t::on_schedule_message_pump_work() callbacks can
+	// facilitate the scheduling process. This function should only be called on the
+	// main application thread and only if cef_initialize() is called with a
+	// CefSettings.multi_threaded_message_loop value of false (0). This function
+	// will not block.
+	///
+	void cef_do_message_loop_work();
+
+	///
 	// Run the CEF message loop. Use this function instead of an application-
 	// provided message loop to get the best balance between performance and CPU
 	// usage. This function should only be called on the main application thread and
