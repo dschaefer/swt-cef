@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Chromium
+Bundle-SymbolicName: org.eclipse.swt.cef;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Automatic-Module-Name: org.eclipse.swt.chromium
+Bundle-RequiredExecutionEnvironment: JavaSE-10
+Require-Bundle: org.eclipse.core.runtime;bundle-version="3.15.100",
+ org.eclipse.swt;bundle-version="3.109.0"
+Bundle-ClassPath: jna-5.2.0.jar,
+ jna-platform-5.2.0.jar,
+ .
+Bundle-Activator: org.eclipse.swt.cef.Activator
+Export-Package: com.sun.jna,
+ org.eclipse.swt.cef,
+ org.eclipse.swt.cef.lib
+Bundle-ActivationPolicy: lazy
