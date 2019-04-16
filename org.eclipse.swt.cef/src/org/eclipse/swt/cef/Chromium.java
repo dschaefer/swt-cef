@@ -23,7 +23,7 @@ public class Chromium extends Composite {
 		try {
 			File cefLibDir = Activator.getBundleLocation(new Path("cef/lib/libswt-cef.so"));
 			System.load(cefLibDir.getAbsolutePath());
-			Display.getDefault().asyncExec(() -> {
+			Display.getDefault().timerExec(1000, () -> {
 				start();
 				Runnable loop = new Runnable() {
 					@Override
