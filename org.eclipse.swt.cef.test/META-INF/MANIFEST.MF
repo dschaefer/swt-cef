@@ -4,7 +4,7 @@ Bundle-Name: Test
 Bundle-SymbolicName: org.eclipse.swt.cef.test;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Automatic-Module-Name: org.eclipse.swt.chromium.test
-Bundle-RequiredExecutionEnvironment: JavaSE-10
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
  org.junit,

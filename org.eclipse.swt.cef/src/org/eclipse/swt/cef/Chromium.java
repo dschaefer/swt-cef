@@ -14,62 +14,40 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import org.eclipse.core.runtime.Path;
-import org.eclipse.swt.cef.lib.LibCef;
-import org.eclipse.swt.cef.lib.cef_app_t;
-import org.eclipse.swt.cef.lib.cef_browser_process_handler_t;
-import org.eclipse.swt.cef.lib.cef_log_severity_t;
-import org.eclipse.swt.cef.lib.cef_main_args_t;
-import org.eclipse.swt.cef.lib.cef_settings_t;
-import org.eclipse.swt.cef.lib.cef_string_t;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
 public class Chromium extends Composite {
 
-	LibCef lib = LibCef.INSTANCE;
-
-	cef_main_args_t args;
-	cef_settings_t settings = new cef_settings_t();
-	cef_app_t app = new cef_app_t();
-	cef_browser_process_handler_t handler = new cef_browser_process_handler_t();
-
-	public Chromium(Composite parent, int style) {
-		super(parent, style);
-
+	static {
 		try {
-			File cefDir = Activator.getBundleLocation(new Path("cef"));
-
-			args = new cef_main_args_t(new String[] { new File(cefDir, "libcef.so").getCanonicalPath() });
-
-			settings.log_severity = cef_log_severity_t.LOGSEVERITY_WARNING.getValue();
-			settings.no_sandbox = 1;
-			settings.external_message_pump = 1;
-			settings.browser_subprocess_path = new cef_string_t(lib, new File(cefDir, "subProcess").getCanonicalPath());
-			settings.resources_dir_path = new cef_string_t(lib, cefDir.getCanonicalPath());
-			settings.locales_dir_path = new cef_string_t(lib, new File(cefDir, "locales").getCanonicalPath());
-
-			handler.on_context_initialized = (self) -> {
-				System.err.println("Context initialized");
-			};
-			handler.on_schedule_message_pump_work = (self, delay_ms) -> {
-				System.err.println("on schedule messae pump work");
-				org.eclipse.swt.widgets.Display.getCurrent().syncExec(() -> {
-					lib.cef_do_message_loop_work();
-				});
-			};
-
-			app.get_browser_process_handler = (self) -> {
-				System.err.println("get browser process handler " + self.getClass().getName());
-				return handler;
-			};
-
-			int rc = lib.cef_initialize(args, settings, app, null);
-			System.err.println("init complete rc = " + rc);
+			File cefLibDir = Activator.getBundleLocation(new Path("cef/lib/libswt-cef.so"));
+			System.load(cefLibDir.getAbsolutePath());
+			Display.getDefault().asyncExec(() -> {
+				start();
+				Runnable loop = new Runnable() {
+					@Override
+					public void run() {
+						work();
+						Display.getDefault().timerExec(20, this);
+					}
+				};
+				Display.getDefault().timerExec(20, loop);
+			});
 		} catch (URISyntaxException | IOException e) {
-			Activator.log("starting up chromium event loop", e);
+			Activator.log("Error loading cef library", e);
 		}
 	}
 
-	public void setUrl(String url) {
-
+	public Chromium(Composite parent, int style) {
+		super(parent, style);
 	}
+
+	native static int start();
+
+	native static int work();
+
+	public void setUrl(String url) {
+	}
+
 }
