@@ -2,14 +2,14 @@
 #include <jni.h>
 
 extern "C"
-JNIEXPORT int Java_org_eclipse_swt_cef_Chromium_start()
+JNIEXPORT int Java_org_eclipse_swt_cef_Chromium_start(JNIEnv *env, jclass cls, jlong parentId)
 {
 	int argc = 1;
 	char *argv[1];
 	argv[0] = strdup("/home/dschaefer/eclipse/workspaces/ceftest/org.eclipse.swt.cef/cef/jdk/jre/bin/java");
 
 	CefMainArgs main_args(argc, argv);
-	CefRefPtr<SWTApp> app(new SWTApp);
+	CefRefPtr<SWTApp> app(new SWTApp(parentId));
 
 	CefSettings settings;
 	settings.no_sandbox = true;

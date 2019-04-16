@@ -5,6 +5,7 @@
 
 class SWTApp: public CefApp, public CefBrowserProcessHandler {
 public:
+	SWTApp(long parentId);
 	virtual ~SWTApp();
 
 	virtual CefRefPtr<CefBrowserProcessHandler> GetBrowserProcessHandler() override {
@@ -18,6 +19,7 @@ public:
 	virtual void OnContextInitialized() override;
 
 private:
+	long parentId;
 	IMPLEMENT_REFCOUNTING(SWTApp);
 };
 

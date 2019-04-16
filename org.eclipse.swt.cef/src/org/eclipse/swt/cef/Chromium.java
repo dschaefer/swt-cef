@@ -14,8 +14,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import org.eclipse.core.runtime.Path;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 
 public class Chromium extends Composite {
 
@@ -23,27 +23,27 @@ public class Chromium extends Composite {
 		try {
 			File cefLibDir = Activator.getBundleLocation(new Path("cef/lib/libswt-cef.so"));
 			System.load(cefLibDir.getAbsolutePath());
-			Display.getDefault().timerExec(1000, () -> {
-				start();
-				Runnable loop = new Runnable() {
-					@Override
-					public void run() {
-						work();
-						Display.getDefault().timerExec(20, this);
-					}
-				};
-				Display.getDefault().timerExec(20, loop);
-			});
 		} catch (URISyntaxException | IOException e) {
 			Activator.log("Error loading cef library", e);
 		}
 	}
 
 	public Chromium(Composite parent, int style) {
-		super(parent, style);
+		super(parent, style | SWT.EMBEDDED);
+		getDisplay().timerExec(1000, () -> {
+			start(embeddedHandle);
+			Runnable loop = new Runnable() {
+				@Override
+				public void run() {
+					work();
+					getDisplay().timerExec(20, this);
+				}
+			};
+			getDisplay().timerExec(20, loop);
+		});
 	}
 
-	native static int start();
+	native static int start(long parentId);
 
 	native static int work();
 
