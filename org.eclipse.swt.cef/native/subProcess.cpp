@@ -6,8 +6,8 @@ public:
 			const CefString& process_type,
 			CefRefPtr<CefCommandLine> command_line)
 	{
-		command_line->AppendSwitch(CefString("disable-cpu-compositing"));
-		command_line->AppendSwitch(CefString("disable-accelerated-2d-canvas"));
+		//command_line->AppendSwitch(CefString("disable-cpu-compositing"));
+		//command_line->AppendSwitch(CefString("disable-accelerated-2d-canvas"));
 
 		printf("starting subProcess: %s\n", command_line->GetCommandLineString().ToString().c_str());
 		fflush(stdout);

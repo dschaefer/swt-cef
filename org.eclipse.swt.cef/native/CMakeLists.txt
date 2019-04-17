@@ -4,6 +4,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 project (subProcess)
 
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
+
 include(ExternalProject)
 
 set(CEF_DIR ${CMAKE_SOURCE_DIR}/../cef)
@@ -33,7 +36,6 @@ ExternalProject_Add(jdk
 add_dependencies(jdk cef-minimal)
 
 add_executable(subProcess
-	SWTApp.cpp
 	subProcess.cpp
 )
 
@@ -62,12 +64,19 @@ target_include_directories(swt-cef PUBLIC
 	${CEF_DIR}
 	${CEF_DIR}/jdk/include
 	${CEF_DIR}/jdk/include/linux   # TODO others obviously :)
+	${GTK3_INCLUDE_DIRS}
+)
+
+target_compile_options(swt-cef PUBLIC
+	${GTK3_CFLAGS_OTHER}
 )
 
 target_link_libraries(swt-cef
 	-L${CEF_DIR}/lib
 	cef_dll_wrapper
 	cef
+	${GTK3_LIBRARIES}
+	X11
 )
 
 set_target_properties(swt-cef PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CEF_DIR}/lib")

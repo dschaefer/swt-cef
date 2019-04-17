@@ -21,8 +21,8 @@ void SWTApp::OnBeforeCommandLineProcessing(
 	const CefString& process_type,
 	CefRefPtr<CefCommandLine> command_line)
 {
-	command_line->AppendSwitch(CefString("disable-gpu"));
-	command_line->AppendSwitch(CefString("disable-software-rasterizer"));
+	//command_line->AppendSwitch(CefString("disable-gpu"));
+	//command_line->AppendSwitch(CefString("disable-software-rasterizer"));
 
 	printf("starting main: %s\n", command_line->GetCommandLineString().ToString().c_str());
 	fflush(stdout);
